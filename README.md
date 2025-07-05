@@ -27,8 +27,7 @@ A PowerShell script to fix DNS issues that may cause 403 Forbidden errors on web
 
 🧪 One-Line Execution  
 ```powershell
-iwr https://github.com/rezahastam1/dns-check-for-403/blob/main/dns-check-for-403.ps1 -UseBasicParsing | iex
-```
+iwr "https://raw.githubusercontent.com/rezahastam1/dns-check-for-403/main/dns-check-for-403.ps1" -UseBasicParsing | iex```
 
 ⚠️ Important: Run PowerShell as Administrator so the script can change system DNS.
 
@@ -51,8 +50,7 @@ iwr https://github.com/rezahastam1/dns-check-for-403/blob/main/dns-check-for-403
 1. PowerShell را با حقوق Administrator باز کنید  
 2. این دستور را اجرا کنید:  
 ```powershell
-iwr https://github.com/rezahastam1/dns-check-for-403/blob/main/dns-check-for-403.ps1 -UseBasicParsing | iex
-```
+iwr "https://raw.githubusercontent.com/rezahastam1/dns-check-for-403/main/dns-check-for-403.ps1" -UseBasicParsing | iex```
 
 🔗 لینک‌های مهم:  
 - [مخزن GitHub](https://github.com/rezahastam1/dns-check-for-403)  
