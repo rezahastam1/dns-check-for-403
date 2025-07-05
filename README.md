@@ -1,22 +1,58 @@
-# DNS Check PowerShell Tool
+# ✅ PowerShell DNS Fix Script - DNS Check ابزار تغییر و رفع مشکل DNS در ویندوز
+**Version:** 1.1.2  
+**Author:** Reza Zarnegar  
+**Website:** [https://github.com/rezazarnegar](https://github.com/rezazarnegar)
+---
 
-A powerful and fully-automated PowerShell script to test and fix DNS issues on Windows.  
-It clears DNS cache, rotates through known public and local DNS servers, detects 403 errors, and restores DNS automatically.
+## 📝 English Description
 
-## 🔧 Features
+> *(English users: scroll up or stay here)*
 
-- Detect current DNS configuration
-- Flush DNS cache
-- Rotate through DNS providers (Google, Cloudflare, Radar, Bokhzar, etc.)
-- Detect 403 Forbidden errors from sites like `https://developer.android.com`
-- Automatically apply working DNS
-- Revert to DHCP if all DNS fail
-- Save logs on Desktop
-- One-liner execution
+This PowerShell script fixes DNS problems in Windows, especially **403 Forbidden** errors when trying to access websites such as:
 
-## ✅ How to Run (One-liner)
+- https://developer.android.com  
+- Google services  
+- Android Studio, Firebase, Flutter SDKs  
+- Blocked international resources in restricted networks  
 
-Paste this into PowerShell:
+**What it does:**
+
+- Detects your current DNS settings
+- Clears DNS cache
+- Cycles through known DNS servers (Google, Cloudflare, local options)
+- Checks connectivity to the target site
+- Detects error 403 responses
+- Automatically picks the first working DNS
+- Reverts to DHCP if all fail
+- Saves detailed log on Desktop
+
+---
+
+## 🌐 توضیحات فارسی
+
+این اسکریپت پاورشل برای کاربرانی طراحی شده که هنگام باز کردن برخی سایت‌ها از جمله:
+
+- سایت‌های گوگل  
+- اندروید استودیو  
+- Firebase یا Flutter SDK  
+- یا هر سایتی که با ارور 403 مواجه می‌شود  
+
+با مشکل مواجه هستند. این ابزار به صورت خودکار DNS سیستم شما را بررسی کرده، کش DNS را پاک می‌کند، بین چندین DNS معتبر (مانند گوگل، کلودفلر، رادار، بشکن و...) چرخش انجام می‌دهد و اولین DNS سالم را تنظیم می‌کند.
+
+اگر هیچ‌کدام از DNSها پاسخ مناسب ندهند، سیستم به حالت DHCP بازگردانده می‌شود.
+
+### ✅ امکانات اسکریپت:
+
+- تشخیص DNS فعلی سیستم  
+- پاکسازی کش DNS (Flush DNS)  
+- بررسی ارور 403 در سایت مدنظر  
+- چرخش خودکار بین DNSها تا یافتن بهترین  
+- ذخیره گزارش کامل در دسکتاپ شما  
+- کاملاً اتوماتیک و بدون نیاز به دخالت کاربر  
+
+---
+
+## 🧪 اجرای سریع با یک خط کد
 
 ```powershell
-iwr https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/dns-check.ps1 -UseBasicParsing | iex
+iwr https://raw.githubusercontent.com/rezahastam1/dns-check/main/dns-check.ps1 -UseBasicParsing | iex
