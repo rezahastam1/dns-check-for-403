@@ -45,11 +45,7 @@ Saves a full log to Desktop with test results
 🧪 One-Line Execution
 
         
-        powershell
-        
-    
-  
-      iwr https://B2n.ir/DNS-for-Error403 -UseBasicParsing | iex
+        iwr https://B2n.ir/DNS-for-Error403 -UseBasicParsing | iex
     
     
   
@@ -60,12 +56,7 @@ Saves a full log to Desktop with test results
 
 After execution, a file like the following will be created on your Desktop:
 
-        
-        plaintext
-        
-    
-  
-      DNS Check - 2025-07-05.txt
+        DNS Check - 2025-07-05.txt
     
     
   
@@ -120,11 +111,7 @@ It includes tested DNS servers, error logs, site response status, and the select
 
 
         
-        powershell
-        
-    
-  
-      iwr https://B2n.ir/DNS-for-Error403 -UseBasicParsing | iex
+        iwr https://B2n.ir/DNS-for-Error403 -UseBasicParsing | iex
     
     
   
@@ -136,11 +123,7 @@ It includes tested DNS servers, error logs, site response status, and the select
 پس از اجرای اسکریپت، گزارشی با نامی مانند زیر روی دسکتاپ شما ایجاد خواهد شد:
 
         
-        plaintext
-        
-    
-  
-      DNS Check - 2025-07-05.txt
+        DNS Check - 2025-07-05.txt
     
     
   
