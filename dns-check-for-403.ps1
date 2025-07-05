@@ -2,7 +2,7 @@
 
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host "❌ Please run this script as Administrator!" -ForegroundColor Red
-    return
+    exit
 }
 
 $DNSProviders = @(
@@ -16,11 +16,11 @@ $DNSProviders = @(
 )
 
 $TestUrl = "https://developer.android.com"
-$Interface = (Get-DnsClient | Where-Object { $_.InterfaceAlias -notmatch "Loopback|isatap|vEthernet" -and $_.ServerAddresses.Count -gt 0 } | Select-Object -First 1).InterfaceAlias
+$Interface = (Get-DnsClient | Where-Object { $_.InterfaceAlias -notmatch "Loopback|isatap|vEthernet" -and $_.InterfaceOperationalStatus -eq "Up" } | Select-Object -First 1).InterfaceAlias
 
 if (-not $Interface) {
     Write-Host "❌ No valid network interface found!" -ForegroundColor Red
-    return
+    exit
 }
 
 $TimeStamp = Get-Date -Format "yyyy-MM-dd_HH-mm"
@@ -97,17 +97,10 @@ foreach ($dns in $DNSProviders) {
     Write-Log "`n🔍 Testing DNS: $($dns.Name) ($($dns.IP)) [$($dns.Country)]"
     Set-DNS -Primary $dns.IP -Secondary $dns.Secondary
 
-    Start-Sleep -Seconds 1
+    Start-Sleep -Seconds 2
     Clear-DNSCache
-    Write-Log "⏳ Waiting 5 seconds to apply DNS..."
-    Start-Sleep -Seconds 5
-
-    Write-Log "⏲️ 10-second connection test countdown:"
-    for ($i = 1; $i -le 10; $i++) {
-        Write-Host "⏱️  Checking connection... $i s" -NoNewline
-        Start-Sleep -Seconds 1
-        Write-Host " ✓"
-    }
+    Write-Log "⏳ Waiting 4 seconds to apply DNS..."
+    Start-Sleep -Seconds 4
 
     $pingResult = Ping-Test
     if ($pingResult) {
@@ -137,5 +130,3 @@ if (-not $Success) {
 
 Write-Log "`n📝 Log saved to: $LogPath"
 Write-Log "✅ Process Completed: $(Get-Date)"
-Write-Host "`n✅ عملیات تمام شد. لاگ ذخیره شد: $LogPath" -ForegroundColor Green
-Pause
