@@ -1,42 +1,55 @@
+🛠️ DNS Check for Error 403 - PowerShell Script
+
+Version: 1.1.2
+
+Author: Reza Zarnegar
+
+GitHub: rezahastam1
+
+Short Link: https://B2n.ir/DNS-for-Error403
+
+
+📌 English Description
+
+A PowerShell script to fix DNS issues that may cause 403 Forbidden errors on websites such as:
+
+
+https://developer.android.com
+
+Google services (Firebase, Android Studio, Flutter, etc.)
+
+Blocked resources or dev tools in restricted networks (e.g., in Iran)
+
+
+✅ Features
+
+
+Detects current system DNS settings
+
+Clears DNS cache
+
+Tries multiple DNS providers (Global & Regional)
+
+Pings and checks HTTP status of target site
+
+Detects 403 Forbidden responses
+
+Automatically switches to the first working DNS
+
+Falls back to DHCP if none succeed
+
+Saves a full log to Desktop with test results
+
+
+
+🧪 One-Line Execution
+
         
-        markdown
+        powershell
         
     
   
-      # 🛠️ DNS Check for Error 403 - PowerShell Script
-
-**Version:** 1.1.2  
-**Author:** Reza Zarnegar  
-**GitHub:** [rezahastam1](https://github.com/rezahastam1)  
-**Short Link:** [https://B2n.ir/DNS-for-Error403](https://B2n.ir/DNS-for-Error403)
-
----
-
-## 📌 English Description
-
-A PowerShell script to fix DNS issues that may cause **403 Forbidden** errors on websites such as:
-
-- https://developer.android.com  
-- Google services (Firebase, Android Studio, Flutter, etc.)  
-- Blocked resources or dev tools in restricted networks (e.g. in Iran)
-
-### ✅ Features
-
-- Detects current system DNS settings  
-- Clears DNS cache  
-- Tries multiple DNS providers (Global & Regional)  
-- Pings and checks HTTP status of target site  
-- Detects 403 Forbidden responses  
-- Automatically switches to the first working DNS  
-- Falls back to DHCP if none succeed  
-- Saves a full log to Desktop with test results
-
----
-
-## 🧪 One-Line Execution
-
-```powershell
-iwr https://B2n.ir/DNS-for-Error403 -UseBasicParsing | iex
+      iwr https://B2n.ir/DNS-for-Error403 -UseBasicParsing | iex
     
     
   
@@ -48,7 +61,7 @@ iwr https://B2n.ir/DNS-for-Error403 -UseBasicParsing | iex
 After execution, a file like the following will be created on your Desktop:
 
         
-        apache
+        plaintext
         
     
   
@@ -123,7 +136,7 @@ It includes tested DNS servers, error logs, site response status, and the select
 پس از اجرای اسکریپت، گزارشی با نامی مانند زیر روی دسکتاپ شما ایجاد خواهد شد:
 
         
-        apache
+        plaintext
         
     
   
@@ -148,7 +161,6 @@ DNS نهایی انتخاب‌شده
 نتیجه نهایی و موفقیت یا شکست عملیات
 
 
-
 🔗 لینک‌ها و منابع
 
 عنوان	 | 	لینک
@@ -156,7 +168,6 @@ DNS نهایی انتخاب‌شده
 GitHub Repo	 | 	مشاهده در GitHub
 فایل اسکریپت	 | 	dns-check-for-403.ps1
 لینک اجرای کوتاه	 | 	https://B2n.ir/DNS-for-Error403
-
 🔎 کلمات کلیدی برای جستجو در گوگل
 
 رفع ارور 403, 403 forbidden ایران, پاورشل DNS, تغییر DNS ویندوز,
@@ -164,7 +175,6 @@ GitHub Repo	 | 	مشاهده در GitHub
 DNS برای Android Studio, مشکل باز نشدن سایت, flush dns, google dns powershell,
 
 403 DNS error fix, پینگ اما سایت باز نمی‌شود
-
 
 👤 درباره نویسنده
 
@@ -174,8 +184,4 @@ DNS برای Android Studio, مشکل باز نشدن سایت, flush dns, googl
 
 📍 GitHub: github.com/rezahastam1
 
-    
-    
-  
-  
 
