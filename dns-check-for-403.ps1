@@ -16,7 +16,9 @@ $DNSProviders = @(
 )
 
 $TestUrl = "https://developer.android.com"
-$Interface = (Get-DnsClient | Where-Object { $_.InterfaceAlias -notmatch "Loopback|isatap|vEthernet" -and $_.InterfaceOperationalStatus -eq "Up" } | Select-Object -First 1).InterfaceAlias
+
+# تشخیص کارت شبکه فعال و دارای IPv4
+$Interface = Get-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses.Count -gt 0 } | Select-Object -First 1 -ExpandProperty InterfaceAlias
 
 if (-not $Interface) {
     Write-Host "❌ No valid network interface found!" -ForegroundColor Red
@@ -99,7 +101,6 @@ foreach ($dns in $DNSProviders) {
 
     Start-Sleep -Seconds 2
     Clear-DNSCache
-    Write-Log "⏳ Waiting 4 seconds to apply DNS..."
     Start-Sleep -Seconds 4
 
     $pingResult = Ping-Test
