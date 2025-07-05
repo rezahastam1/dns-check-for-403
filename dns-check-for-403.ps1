@@ -1,4 +1,3 @@
-# لیست DNS ها
 $DNSProviders = @(
     @{Name="Cloudflare"; IP="1.1.1.1"; Secondary="1.0.0.1"; Country="Global"},
     @{Name="Google"; IP="8.8.8.8"; Secondary="8.8.4.4"; Country="Global"},
@@ -12,12 +11,10 @@ $DNSProviders = @(
 $TestUrl = "https://developer.android.com"
 $Interface = (Get-DnsClient | Where-Object {$_.InterfaceAlias -notmatch "Loopback|isatap"} | Select-Object -First 1).InterfaceAlias
 
-# مسیر لاگ روی دسکتاپ
 $TimeStamp = Get-Date -Format "yyyy-MM-dd_HH-mm"
 $DesktopPath = [Environment]::GetFolderPath("Desktop")
 $LogPath = Join-Path $DesktopPath "DNS Check $TimeStamp.txt"
 
-# توابع کمکی
 function Write-Log {
     param ($text)
     $text | Tee-Object -FilePath $LogPath -Append
@@ -59,13 +56,11 @@ function Ping-Test {
     return $ping
 }
 
-# شروع برنامه
 Write-Log "======================="
 Write-Log "🧪 DNS Check Started: $(Get-Date)"
 Write-Log "Target: $TestUrl"
 Write-Log "======================="
 
-# DNS فعلی سیستم
 $CurrentDNS = (Get-DnsClientServerAddress -InterfaceAlias $Interface -AddressFamily IPv4).ServerAddresses -join ", "
 Write-Log "`n🔎 Current DNS: $CurrentDNS"
 
