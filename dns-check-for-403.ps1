@@ -1,10 +1,8 @@
-# Enable TLS 1.2 for GitHub access
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-# Ensure running as Administrator
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host "❌ Please run this script as Administrator!" -ForegroundColor Red
-    exit
+    return
 }
 
 $DNSProviders = @(
@@ -18,16 +16,13 @@ $DNSProviders = @(
 )
 
 $TestUrl = "https://developer.android.com"
-
-# Detect active interface
 $Interface = (Get-DnsClient | Where-Object { $_.InterfaceAlias -notmatch "Loopback|isatap|vEthernet" -and $_.ServerAddresses.Count -gt 0 } | Select-Object -First 1).InterfaceAlias
 
 if (-not $Interface) {
     Write-Host "❌ No valid network interface found!" -ForegroundColor Red
-    exit
+    return
 }
 
-# Logging
 $TimeStamp = Get-Date -Format "yyyy-MM-dd_HH-mm"
 $DesktopPath = [Environment]::GetFolderPath("Desktop")
 $LogPath = Join-Path $DesktopPath "DNS Check $TimeStamp.txt"
@@ -142,3 +137,5 @@ if (-not $Success) {
 
 Write-Log "`n📝 Log saved to: $LogPath"
 Write-Log "✅ Process Completed: $(Get-Date)"
+Write-Host "`n✅ عملیات تمام شد. لاگ ذخیره شد: $LogPath" -ForegroundColor Green
+Pause
