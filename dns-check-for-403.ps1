@@ -1,3 +1,12 @@
+# Enable TLS 1.2 for GitHub access
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+# Ensure running as Administrator
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Write-Host "❌ Please run this script as Administrator!" -ForegroundColor Red
+    exit
+}
+
 $DNSProviders = @(
     @{Name="Cloudflare"; IP="1.1.1.1"; Secondary="1.0.0.1"; Country="Global"},
     @{Name="Google"; IP="8.8.8.8"; Secondary="8.8.4.4"; Country="Global"},
@@ -9,8 +18,16 @@ $DNSProviders = @(
 )
 
 $TestUrl = "https://developer.android.com"
-$Interface = (Get-DnsClient | Where-Object {$_.InterfaceAlias -notmatch "Loopback|isatap"} | Select-Object -First 1).InterfaceAlias
 
+# Detect active interface
+$Interface = (Get-DnsClient | Where-Object { $_.InterfaceAlias -notmatch "Loopback|isatap|vEthernet" -and $_.ServerAddresses.Count -gt 0 } | Select-Object -First 1).InterfaceAlias
+
+if (-not $Interface) {
+    Write-Host "❌ No valid network interface found!" -ForegroundColor Red
+    exit
+}
+
+# Logging
 $TimeStamp = Get-Date -Format "yyyy-MM-dd_HH-mm"
 $DesktopPath = [Environment]::GetFolderPath("Desktop")
 $LogPath = Join-Path $DesktopPath "DNS Check $TimeStamp.txt"
@@ -21,20 +38,32 @@ function Write-Log {
 }
 
 function Clear-DNSCache {
-    ipconfig /flushdns | Out-Null
-    Clear-DnsClientCache
-    Write-Log "🧹 DNS cache cleared."
+    try {
+        ipconfig /flushdns | Out-Null
+        Clear-DnsClientCache -ErrorAction Stop
+        Write-Log "🧹 DNS cache cleared."
+    } catch {
+        Write-Log "❌ Failed to clear DNS cache: $($_.Exception.Message)"
+    }
 }
 
 function Set-DNS {
     param ($Primary, $Secondary)
-    Set-DnsClientServerAddress -InterfaceAlias $Interface -ServerAddresses ($Primary, $Secondary)
-    Write-Log "🌐 DNS set to: $Primary, $Secondary"
+    try {
+        Set-DnsClientServerAddress -InterfaceAlias $Interface -ServerAddresses ($Primary, $Secondary) -ErrorAction Stop
+        Write-Log "🌐 DNS set to: $Primary, $Secondary"
+    } catch {
+        Write-Log "❌ Failed to set DNS: $($_.Exception.Message)"
+    }
 }
 
 function Set-DHCP {
-    Set-DnsClientServerAddress -InterfaceAlias $Interface -ResetServerAddresses
-    Write-Log "🔁 DNS reset to DHCP mode."
+    try {
+        Set-DnsClientServerAddress -InterfaceAlias $Interface -ResetServerAddresses -ErrorAction Stop
+        Write-Log "🔁 DNS reset to DHCP mode."
+    } catch {
+        Write-Log "❌ Failed to reset DNS to DHCP: $($_.Exception.Message)"
+    }
 }
 
 function Test-Site {
@@ -52,14 +81,17 @@ function Test-Site {
 }
 
 function Ping-Test {
-    $ping = Test-Connection -ComputerName "developer.android.com" -Count 2 -Quiet -ErrorAction SilentlyContinue
-    return $ping
+    try {
+        return Test-Connection -ComputerName "developer.android.com" -Count 2 -Quiet -ErrorAction SilentlyContinue
+    } catch {
+        return $false
+    }
 }
 
-Write-Log "======================="
+Write-Log "==============================="
 Write-Log "🧪 DNS Check Started: $(Get-Date)"
 Write-Log "Target: $TestUrl"
-Write-Log "======================="
+Write-Log "==============================="
 
 $CurrentDNS = (Get-DnsClientServerAddress -InterfaceAlias $Interface -AddressFamily IPv4).ServerAddresses -join ", "
 Write-Log "`n🔎 Current DNS: $CurrentDNS"
@@ -69,16 +101,15 @@ $Success = $false
 foreach ($dns in $DNSProviders) {
     Write-Log "`n🔍 Testing DNS: $($dns.Name) ($($dns.IP)) [$($dns.Country)]"
     Set-DNS -Primary $dns.IP -Secondary $dns.Secondary
+
     Start-Sleep -Seconds 1
-
     Clear-DNSCache
+    Write-Log "⏳ Waiting 5 seconds to apply DNS..."
+    Start-Sleep -Seconds 5
 
-    Write-Log "⏳ Waiting 3 seconds to apply DNS..."
-    Start-Sleep -Seconds 3
-
-    Write-Log "⏲️ Starting 10-second connection test countdown:"
+    Write-Log "⏲️ 10-second connection test countdown:"
     for ($i = 1; $i -le 10; $i++) {
-        Write-Host "Checking connection... $i s" -NoNewline
+        Write-Host "⏱️  Checking connection... $i s" -NoNewline
         Start-Sleep -Seconds 1
         Write-Host " ✓"
     }
@@ -93,7 +124,7 @@ foreach ($dns in $DNSProviders) {
             $Success = $true
             break
         } elseif ($status -eq 403) {
-            Write-Log "⛔️ ERROR 403: Forbidden with DNS: $($dns.Name) - Skipping to next DNS."
+            Write-Log "⛔️ ERROR 403: Forbidden with DNS: $($dns.Name) - Skipping."
         } elseif ($status) {
             Write-Log "❌ Failed with status code: $status"
         } else {
