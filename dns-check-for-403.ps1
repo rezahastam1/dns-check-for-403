@@ -1,15 +1,3 @@
-# بررسی دسترسی Administrator
-function Test-IsAdmin {
-    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
-    $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
-    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-}
-
-if (-not (Test-IsAdmin)) {
-    Write-Host "❌ لطفاً PowerShell را به صورت Run as Administrator اجرا کنید." -ForegroundColor Red
-    return
-}
-
 # لیست DNS ها
 $DNSProviders = @(
     @{Name="Cloudflare"; IP="1.1.1.1"; Secondary="1.0.0.1"; Country="Global"},
