@@ -8,7 +8,7 @@
 
 ---
 
-### 📌 English Description
+### 📌  Description
 
 A **PowerShell script** designed for developers who are experiencing **403 Forbidden errors** when accessing websites such as:
 
